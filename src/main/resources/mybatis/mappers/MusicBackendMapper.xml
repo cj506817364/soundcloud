@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ppj.springBoot.mapper.backend.MusicBackendMapper">
+	
+	<select id="findMusicList" resultMap="musicRM">
+		select * from audio_tb
+	</select>
+
+	<resultMap type="Audio" id="musicRM">
+		<id column="audio_id" property="audioId"/>
+	</resultMap>
+	
+	<!-- 批量修改状态 -->
+	<update id="updateState">
+		update audio_tb set state = #{state} where audio_id in(
+			<foreach collection="audioIds" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	</update>
+	
+	<!-- 根据id查询用户信息 -->
+	<select id="findMusicById" resultMap="musicRM">
+		select * from audio_tb
+		where audio_id = #{audioId}
+	</select>
+	
+	<delete id="deleteMusicById">
+		delete from audio_tb where audio_id in(
+			<foreach collection="array" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	</delete>
+	
+	<insert id="saveAudio">
+		insert into audio_tb(
+			audio_id,audioname,uuid_name,genre,
+			special,singer,write_words,compose,
+			play_num,state,remarks,
+			create_time,update_tinme,create_by,update_by
+		) values(
+			#{audioId},
+			#{audioname},
+			#{uuidName},
+			#{genre},
+			#{special},
+			#{singer},
+			#{writeWords},
+			#{compose},
+			#{playNum},
+			#{state},
+			#{remarks},
+			#{createTime,jdbcType=DATE},
+			#{updateTime,jdbcType=DATE},
+			#{createBy,jdbcType=VARCHAR},
+			#{updateBy,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 根据音频id修改用户信息 -->
+	<update id="updateAudio" parameterType="Audio">
+		update audio_tb
+		<set>
+			audioname=#{audioname},
+			uuid_name=#{uuidName},
+			genre=#{genre},
+			special=#{special},
+			singer=#{singer},
+			write_words=#{writeWords},
+			compose=#{compose},
+			play_num=#{playNum},
+			state=#{state},
+			remarks=#{remarks},
+			<if test="createTime != null">create_time = #{createTime,jdbcType=DATE},</if>
+			<if test="updateTime != null">update_tinme = #{updateTime,jdbcType=DATE},</if>
+			<if test="createBy != null">create_by = #{createBy,jdbcType=VARCHAR},</if>
+			<if test="updateBy != null">update_by = #{updateBy,jdbcType=VARCHAR}</if>
+		</set>
+		where audio_id = #{audioId}
+	</update>
+
+</mapper>

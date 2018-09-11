@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ppj.springBoot.mapper.backend.UserBackendMapper">
+	<!--配置别名包 否则不生效 -->
+	<select id="findUserList" resultMap="userRM">
+		select
+			u.user_id,u.username,i.nickname,i.email,
+			i.gender,i.birthday,i.score,i.vip,i.reg_time,
+			i.last_login_time,i.remarks,i.city,i.state
+		from user_tb u
+		left join user_info_tb i
+		on u.user_id = i.user_id
+	</select>
+
+	<resultMap type="User" id="userRM" autoMapping="true">
+		<id column="user_id" property="userId" />
+		<result column="username" property="username" />
+
+		<association property="userInfo" javaType="UserInfo">
+			<id column="user_info_id" property="userInfoId" />
+			<result column="nickname" property="nickname" />
+			<result column="email" property="email" />
+			<result column="gender" property="gender" />
+			<result column="birthday" property="birthday" />
+			<result column="score" property="score" />
+			<result column="vip" property="vip" />
+			<result column="reg_time" property="createTime" />
+			<result column="last_login_time" property="lastLoginTime" />
+			<result column="remarks" property="remarks" />
+			<result column="city" property="city" />
+			<result column="state" property="state" />
+		</association>
+	</resultMap>
+
+	<!-- 更改vip -->
+	<update id="updateVip">
+		update user_info_tb set vip = #{vip} where user_id in(
+		<foreach collection="userIds" item="id" separator=",">
+			#{id}
+		</foreach>
+		)
+	</update>
+
+	<!-- 修改状态,是否被禁用 -->
+	<update id="updateState">
+		update user_info_tb set state = #{state} where user_id in(
+		<foreach collection="userIds" item="id" separator=",">
+			#{id}
+		</foreach>
+		)
+	</update>
+
+	<!-- 新增用户 -->
+	<insert id="saveUser">
+		insert into user_tb
+		valuse (
+		#{userId},
+		#{username},
+		#{password},
+		#{createTime,jdbcType=DATE},
+		#{updateTime,jdbcType=DATE},
+		#{createBy,jdbcType=VARCHAR},
+		#{updateBy,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 删除用户 -->
+	<delete id="deleteUser">
+		delete from user_tb where user_id in (
+		<foreach collection="array" item="id" separator=",">
+			#{id}
+		</foreach>
+		)
+	</delete>
+
+	<!-- 根据用户id查看用户信息 -->
+	<select id="findUserById" resultMap="userRM">
+		select
+			u.user_id,u.username,i.nickname,i.email,
+			i.gender,i.birthday,i.score,i.vip,i.reg_time,
+			i.last_login_time,i.remarks,i.city,i.state
+		from user_tb u
+		left join user_info_tb i
+		on u.user_id = i.user_id
+		where u.user_id = #{userId}
+	</select>
+
+	<!-- 根据用户id修改用户信息 -->
+	<update id="updateUser" parameterType="User">
+		update user_tb
+		<set>
+			username = #{username},
+			password = #{password},
+			<if test="createTime != null">create_time = #{createTime,jdbcType=DATE},</if>
+			<if test="updateTime != null">update_tinme = #{updateTime,jdbcType=DATE},</if>
+			<if test="createBy != null">create_by = #{createBy,jdbcType=VARCHAR},</if>
+			<if test="updateBy != null">update_by = #{updateBy,jdbcType=VARCHAR}</if>
+		</set>
+		where user_id = #{userId}
+	</update>
+
+
+</mapper>

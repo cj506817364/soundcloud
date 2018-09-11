@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ppj.springBoot.mapper.backend.MovieBackendMapper">
+	<select id="findAllMovie" resultType="Video">
+		select * from video_tb
+	</select>
+
+	<insert id="addMovie">
+		insert into
+		video_tb(
+		video_id,
+		videoname,
+		uuid_name,
+		videotime,
+		remarks,
+		brief,
+		video_url,
+		state,
+		expanded_name,
+		create_time,
+		update_time)
+		values(#{videoId},#{videoname},#{uuidName},#{videotime},#{remarks},#{brief},#{videoUrl},#{state},#{expandedName},#{createTime},#{updateTime})
+	</insert>
+	
+	<delete id="deleteMovieById">
+		delete from video_tb where video_id = #{videoId}
+	</delete>
+	
+	<delete id="deleteMovie_UserById">
+		delete from user_video_tb where video_id = #{videoId}
+	</delete>
+	
+	<select id="findMovieById" resultType="Video">
+		select * from video_tb where video_id = #{videoId}
+	</select>
+	
+	<update id="saveMovieUpdate">
+		update video_tb
+		<set>
+			<if test="videoname!=null">videoname=#{videoname},</if>
+			<if test="uuidName!=null">uuid_name=#{uuidName},</if>
+			<if test="videotime!=null">videotime=#{videotime},</if>
+			<if test="remarks!=null">remarks=#{remarks},</if>
+			<if test="brief!=null">brief=#{brief},</if>
+			<if test="videoUrl!=null">video_url=#{videoUrl},</if>
+			<if test="state!=null">state=#{state},</if>
+			<if test="expandedName!=null">expanded_name=#{expandedName},</if>
+			<if test="updateTime!=null">update_time=#{updateTime}</if>
+		</set>
+		where video_id = #{videoId}
+	</update>
+</mapper>

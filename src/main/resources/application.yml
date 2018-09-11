@@ -1,0 +1,19 @@
+server:
+  port: 9090
+  context-path: /
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://47.100.63.227:31306/soundcloud
+    username: root
+    password: Sy2557bln
+  mvc:
+    view:
+      prefix: /pages
+      suffix: .jsp
+      
+mybatis:
+  config-location: classpath:/mybatis/mybatis-config.xml
+  mapper-locations: classpath:/mybatis/mappers/*.xml
+  type-aliases-package: cn.ppj.springBoot.pojo

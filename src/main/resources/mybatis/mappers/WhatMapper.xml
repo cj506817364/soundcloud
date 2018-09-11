@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ppj.springBoot.mapper.WhatMapper">
+	<select id="findRandomSong12" resultType="Audio">
+		select * from audio_tb where audio_id != '666' limit #{offset} ,12
+	</select>
+	<select id="findNewSong8" resultType="Audio">
+		select * from audio_tb where audio_id != '666' order by update_tinme desc limit 0,8
+	</select>
+	<select id="findTop5" resultType="Audio">
+		select * from audio_tb where audio_id != '666' order by play_num desc limit 0,7
+	</select>
+</mapper>

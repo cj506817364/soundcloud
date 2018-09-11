@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ppj.springBoot.mapper.NewsMapper">
+
+	<select id="findAllNews" resultType="News">
+
+		select * from news_tb order by pupdate desc
+	</select>
+	
+	<insert id="addNews">
+		insert into news_tb (
+		id,title,content,pupdate,imglink,redirecturl
+		)
+		values
+		(null,#{title},#{content},#{pupdate},#{imgLink},#{redirectUrl})
+	</insert>
+	
+
+</mapper>

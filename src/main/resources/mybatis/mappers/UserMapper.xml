@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ppj.springBoot.mapper.UserMapper">
+ <!--配置别名包 否则不生效-->
+    <select id="findUserList" resultMap="userRM">
+        select ut.user_id,ut.username,ui.nickname,ui.email,
+		ui.gender,ui.birthday,ui.score,ui.vip,ui.remarks,ui.city,ui.last_login_time,ui.state from
+		user_tb ut left join user_info_tb ui
+		on ut.user_id=ui.user_id;
+    </select>
+    
+    <resultMap type="User" id="userRM" autoMapping="true">
+    	<id column="user_id" property="userId"/>
+    	
+    	<association property="userInfo" javaType="UserInfo">
+    		<id column="user_id" property="userId"/>
+    		
+    		<!-- <result column="last_login_time" property="lastLoginTime"/> -->
+    	</association>
+    </resultMap>
+	
+	<select id="findUserName" resultType="User">
+		select * from user_tb 
+	</select>
+
+	<insert id="saveUser">
+		insert into user_tb 
+		values (
+			#{userId},
+			#{username},
+			#{password},
+	 		#{createTime,jdbcType=DATE},
+	 		#{updateTime,jdbcType=DATE},
+			#{createBy,jdbcType=VARCHAR},
+	 		#{updateBy,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="findUserByUsername" resultType="User">
+		select * from user_tb  where username= #{username}
+	</select>
+
+  
+
+</mapper>

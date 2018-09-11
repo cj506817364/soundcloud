@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ppj.springBoot.mapper.UserPlayListMapper">
+
+	<select id="findAllByUserId" resultType="Audio">
+		select
+		a.audioname,a.uuid_name,a.singer,a.audio_url,a.pic_url,a.expanded_name,a.pic_name
+		from audio_tb a,
+		(select audio_id from user_audio_tb where user_id=#{userId}) b
+		where a.audio_id=b.audio_id order by pic_name
+	</select>
+
+</mapper>

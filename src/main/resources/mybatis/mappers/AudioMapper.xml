@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ppj.springBoot.mapper.AudioMapper">
+
+	<select id="findAudioByName" resultType="Audio">
+		select
+		a.audio_id,a.audioname,a.uuid_name,a.special,a.genre,a.singer,a.singer,a.write_words,a.compose,a.pic_name,a.pic_url,a.play_num,a.expanded_name,a.state,a.remarks,a.audio_url
+		from audio_tb a where audioname=#{audioname}
+	</select>
+
+	<select id="findAudioById" resultType="Audio">
+		select
+		a.audio_id,a.audioname,a.uuid_name,a.special,a.genre,a.singer,a.singer,a.write_words,a.compose,a.pic_name,a.pic_url,a.play_num,a.expanded_name,a.state,a.remarks,a.audio_url
+		from audio_tb a where audio_id=#{audioId}
+	</select>
+
+	<insert id="saveUserAudio">
+		insert into user_audio_tb
+		values(#{userId},#{audioId},null)
+	</insert>
+
+	<select id="findUserAudioByUserId" resultType="String">
+		select audio_id
+		from user_audio_tb where user_id = #{userId}
+	</select>
+
+	<select id="findAllByUserId" resultType="Audio">
+		select
+		a.audio_id,a.audioname,a.uuid_name,a.singer,a.audio_url,a.pic_url,a.expanded_name,a.pic_name,b.order_id
+		from audio_tb a,
+		(select * from user_audio_tb where
+		user_id=#{userId} )
+		b
+		where a.audio_id=b.audio_id order by order_id desc
+	</select>
+
+	<delete id="deleteUserAudioByName">
+		delete from user_audio_tb where
+		user_id = #{userId}
+		and
+		audio_id in (select audio_id from audio_tb where audioname=#{audioname
+		})
+	</delete>
+
+	<update id="AddPlayNum">
+		update audio_tb set play_num=play_num+1 where
+		audio_id=#{audioId}
+	</update>
+
+</mapper>
